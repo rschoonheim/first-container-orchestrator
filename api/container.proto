@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package container.v1;
+
+option go_package = "container/v1;container_v1";
+
+message Container {
+  string id = 1;
+}
+
+service ContainerService {
+  rpc Get(Container) returns (Container) {}
+}
+
