@@ -3,7 +3,6 @@ package main
 import (
 	"crypto/tls"
 	"crypto/x509"
-	"fmt"
 	"github.com/gofiber/fiber/v3/client"
 	"gopkg.in/yaml.v2"
 	"os"
@@ -36,7 +35,8 @@ func init() {
 		panic(err)
 	}
 
-	fmt.Print(string(resp.Body()))
+	println(resp.Status())
+
 }
 
 func main() {
