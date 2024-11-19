@@ -1,9 +1,49 @@
 package main
 
 import (
+	"crypto/tls"
+	"crypto/x509"
+	"fmt"
+	"github.com/gofiber/fiber/v3/client"
 	"gopkg.in/yaml.v2"
 	"os"
 )
+
+func init() {
+	os.MkdirAll("storage/cli", 0755)
+
+	cc := client.New()
+
+	certPool, err := x509.SystemCertPool()
+	if err != nil {
+		panic(err)
+	}
+
+	cert, err := os.ReadFile("certs/client.crt")
+	if err != nil {
+		panic(err)
+	}
+	certPool.AppendCertsFromPEM(cert)
+
+	// server-ca
+	caCert, err := os.ReadFile("certs/server-ca.crt")
+	if err != nil {
+		panic(err)
+	}
+	certPool.AppendCertsFromPEM(caCert)
+
+	cc.SetTLSConfig(&tls.Config{
+		RootCAs: certPool,
+	})
+
+	resp, err := cc.Get("https://localhost:7331/")
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Print(string(resp.Body()))
+
+}
 
 func main() {
 	println("Container Orchestrator CLI\n")

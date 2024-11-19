@@ -10,10 +10,10 @@ import (
 func init() {
 
 	var storagePaths = []string{
-		"storage/containers",
-		"storage/volumes",
-		"storage/networks",
-		"storage/images",
+		"storage/storage/containers",
+		"storage/storage/volumes",
+		"storage/storage/networks",
+		"storage/storage/images",
 	}
 
 	for _, path := range storagePaths {
