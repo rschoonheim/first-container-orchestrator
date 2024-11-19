@@ -14,18 +14,14 @@ func init() {
 
 	cc := client.New()
 
-	certPool, err := x509.SystemCertPool()
+	// curl -v --cacert certs/server-ca.crt --cert certs/client.crt --key certs/client.key https://127.0.0.1:7331/
+
+	cert, err := tls.LoadX509KeyPair("certs/client.crt", "certs/client.key")
 	if err != nil {
 		panic(err)
 	}
 
-	cert, err := os.ReadFile("certs/client.crt")
-	if err != nil {
-		panic(err)
-	}
-	certPool.AppendCertsFromPEM(cert)
-
-	// server-ca
+	certPool := x509.NewCertPool()
 	caCert, err := os.ReadFile("certs/server-ca.crt")
 	if err != nil {
 		panic(err)
@@ -33,16 +29,16 @@ func init() {
 	certPool.AppendCertsFromPEM(caCert)
 
 	cc.SetTLSConfig(&tls.Config{
-		RootCAs: certPool,
+		Certificates: []tls.Certificate{cert},
+		RootCAs:      certPool,
 	})
 
-	resp, err := cc.Get("https://localhost:7331/")
+	resp, err := cc.Get("https://127.0.0.1:7331/")
 	if err != nil {
 		panic(err)
 	}
 
 	fmt.Print(string(resp.Body()))
-
 }
 
 func main() {
