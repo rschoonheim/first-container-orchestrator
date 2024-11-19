@@ -1,7 +1,6 @@
 package main
 
 import (
-	network_v1 "first-container-orchestrator/network/v1"
 	"google.golang.org/grpc"
 	"log/slog"
 	"net"
@@ -39,8 +38,6 @@ func main() {
 	// Create gRPC server
 	//
 	server := grpc.NewServer()
-
-	network_v1.RegisterNetworkServiceServer(server, &network_v1.NetworkService{})
 
 	server.Serve(listener)
 }
