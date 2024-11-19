@@ -14,8 +14,6 @@ func init() {
 
 	cc := client.New()
 
-	// curl -v --cacert certs/server-ca.crt --cert certs/client.crt --key certs/client.key https://127.0.0.1:7331/
-
 	cert, err := tls.LoadX509KeyPair("certs/client.crt", "certs/client.key")
 	if err != nil {
 		panic(err)
