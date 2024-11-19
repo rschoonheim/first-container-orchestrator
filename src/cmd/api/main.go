@@ -2,6 +2,18 @@ package main
 
 import "github.com/gofiber/fiber/v2"
 
+var (
+	// runAddress - The address to run the API server on.
+	runAddress = ":7331"
+
+	// environment - The environment the application is running in.
+	environment = "local"
+)
+
+func init() {
+
+}
+
 func main() {
 	app := fiber.New()
 
@@ -11,5 +23,5 @@ func main() {
 		})
 	})
 
-	app.Listen(":7331")
+	app.Listen(runAddress)
 }
