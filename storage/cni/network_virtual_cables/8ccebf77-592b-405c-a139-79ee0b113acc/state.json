@@ -1,0 +1,1 @@
+{"id":"8ccebf77-592b-405c-a139-79ee0b113acc","veth0":{"id":"veth9930f316fa0","ip_address":"192.168.64.1/24"},"veth1":{"id":"veth9930f316fa1","ip_address":"192.168.64.2/24"},"source_network_namespace":{"name":"48e3935f-953f-46a6-8116-4c60f8bd818a"},"destination_network_namespace":{"name":"0cc81f08-0138-4779-a869-9853e3aebfe6"}}
