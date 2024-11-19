@@ -1,69 +1,57 @@
 package main
 
 import (
-	"first-container-orchestrator/internal/cni"
-	"github.com/google/uuid"
-	"log/slog"
+	"gopkg.in/yaml.v2"
 	"os"
 )
 
 func main() {
+	println("Container Orchestrator CLI\n")
 
-	// Delete the network namespace before exiting..
-	//
-	cni.NetworkNamespaceDelete(&cni.NetworkNamespace{
-		Name: "test",
-	})
+	argc := len(os.Args)
+	if argc < 2 {
+		println("Usage: container-orchestrator-cli <command> [options]")
 
-	cni.NetworkNamespaceDelete(&cni.NetworkNamespace{
-		Name: "test2",
-	})
-	networkNamespace, err := cni.NetworkNamespaceCreate(
-		&cni.NetworkNamespace{
-			Name: uuid.New().String(),
-		},
-	)
-
-	if err != nil {
-		slog.Error("Failed to create network namespace", "error", err)
+		println("Commands:")
+		println("  apply	-	Apply configuration")
 		os.Exit(1)
 	}
 
-	networkNamespaceTwo, err := cni.NetworkNamespaceCreate(
-		&cni.NetworkNamespace{
-			Name: uuid.New().String(),
-		},
-	)
+	command := os.Args[1]
 
-	if err != nil {
-		slog.Error("Failed to create network namespace", "error", err)
-		os.Exit(1)
+	// todo: Implement CLI functionality
+	// todo: Refactor the switch statement to maintainable code
+
+	switch command {
+	case "apply":
+		if argc < 3 {
+			println("Usage: container-orchestrator-cli apply <project-path>")
+			os.Exit(1)
+		}
+		projectPath := os.Args[2]
+
+		println("Applying configuration from project path:", projectPath)
+
+		// Read main.yaml
+		//
+		file, err := os.Open(projectPath + "/main.yaml")
+		if err != nil {
+			println("Failed to apply configuration. main.yaml not found in project path.")
+			os.Exit(1)
+		}
+		defer file.Close()
+
+		var mainConfig mainConfiguration
+		err = yaml.NewDecoder(file).Decode(&mainConfig)
+		if err != nil {
+			println("Failed to apply configuration. main.yaml is invalid.")
+			os.Exit(1)
+		}
+
+		// Validate the received configuration
+
+		// Start application of the configuration
+
 	}
-
-	// Add virtual cable between network namespaces
-	//
-	vcable, err := cni.NetworkVirtualCableCreate(&cni.NetworkVirtualCable{
-		SourceNetworkNamespace:      networkNamespace,
-		DestinationNetworkNamespace: networkNamespaceTwo,
-	})
-
-	if err != nil {
-		slog.Error("Failed to create network virtual cable", "error", err)
-		os.Exit(1)
-	}
-
-	slog.Info("Network virtual cable created", "cable", vcable)
-
-	// Delete the network namespace before exiting..
-	//
-	cni.NetworkNamespaceDelete(&cni.NetworkNamespace{
-		Name: "test",
-	})
-
-	cni.NetworkNamespaceDelete(&cni.NetworkNamespace{
-		Name: "test2",
-	})
-
-	os.Exit(0)
 
 }
