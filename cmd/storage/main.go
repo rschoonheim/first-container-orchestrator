@@ -1,7 +1,48 @@
 package main
 
+import (
+	network_v1 "first-container-orchestrator/network/v1"
+	"google.golang.org/grpc"
+	"log/slog"
+	"net"
+	"os"
+)
+
+func init() {
+
+	var storagePaths = []string{
+		"storage/containers",
+		"storage/volumes",
+		"storage/networks",
+		"storage/images",
+	}
+
+	for _, path := range storagePaths {
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			os.MkdirAll(path, 0755)
+			slog.Info("Created storage directory", "path", path)
+		}
+	}
+}
+
 func main() {
 
+	// Create listener
+	//
+	listener, err := net.Listen("tcp", ":8080")
+	if err != nil {
+		slog.Error("Failed to start server", "error", err)
+		os.Exit(1)
+	}
+	defer listener.Close()
+
+	// Create gRPC server
+	//
+	server := grpc.NewServer()
+
+	network_v1.RegisterNetworkServiceServer(server, &network_v1.NetworkService{})
+
+	server.Serve(listener)
 }
 
 //cmd := exec.Cmd{

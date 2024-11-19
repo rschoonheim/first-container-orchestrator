@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package network.v1;
+
+option go_package = "network/v1;network_v1";
+
+message Network {
+  string id = 1;
+}
+
+message GetNetworkRequest {
+  string id = 1;
+}
+
+message CreateNetworkRequest {
+  string id = 1;
+  string name = 2;
+}
+
+service NetworkService {
+  rpc GetNetwork(GetNetworkRequest) returns (Network);
+  rpc CreateNetwork(CreateNetworkRequest) returns (Network);
+}
