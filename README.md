@@ -21,14 +21,19 @@ The storage server is responsible for managing the state of the system.
 ### API Server
 The API server is a RESTful API providing an interface to the system.
 
-#### Secure Communication
-To secure communication between the API server and other components, the API server uses mutual TLS to authenticate
-clients. The server uses a self-signed certificate to authenticate clients. The client must have the server's public key
-to authenticate the server.
-
-[More information about mTLS](https://www.cloudflare.com/learning/access-management/what-is-mutual-tls)
-
 
 ### Command Line Interface (CLI)
 
 The CLI is a command line interface that interacts with the API server.
+
+## Internal Modules
+Shared functionality across services is implemented in internal modules.
+
+### Container Network Interface (CNI)
+
+[More Information](src/internal/cni/README.md)
+
+### Mutual TLS (mTLS)
+Communication between services is secured using mTLS. The mTLS module provides a simple interface for creating a mutual
+TLS connections between services.
+[More information](src/internal/mtls/README.md)
